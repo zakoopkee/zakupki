@@ -12,8 +12,17 @@ def extract_features(data: pd.DataFrame):
     return pd.concat([data, onehot, ngrams_title, ngrams_proceduredisplayname], axis=1).drop(columns_drop, axis=1)
 
 
-def get_onehot_currency(data: pd.DataFrame):
-    values = data.CurrencyCode.astype(str).values
+def get_ngrams(data, column, n_features, ngram_range, analyzer):
+    vectorizer = HashingVectorizer(input='content', encoding='utf-8', decode_error='strict', lowercase=True,
+                                   token_pattern=r'\b\w+\b', ngram_range=ngram_range, analyzer=analyzer,
+                                   n_features=n_features, binary=True, norm=None)
+    analyze = vectorizer.fit_transform(data[column])
+    feats = pd.SparseDataFrame(analyze).fillna(0)
+    return pd.DataFrame(feats).add_prefix(f'Ngrams_{column}_')
+
+
+def get_onehot(data, column):
+    values = data[column].astype(str).values
     # integer encode
     label_encoder = LabelEncoder()
     integer_encoded = label_encoder.fit_transform(values)
@@ -21,24 +30,21 @@ def get_onehot_currency(data: pd.DataFrame):
     onehot_encoder = OneHotEncoder(sparse=False)
     integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
     onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
-    labels = data.CurrencyCode.sort_values().unique()
-    return pd.DataFrame(onehot_encoded, columns=labels).add_prefix('OneHot_')
+    labels = data[column].sort_values().unique()
+    return pd.DataFrame(onehot_encoded, columns=labels).add_prefix(f'OneHot_{column}_')
+
+
+def get_onehot_currency(data: pd.DataFrame):
+    return get_onehot(data, 'CurrencyCode')
+
+
+def get_onehot_proceduredisplayname(data: pd.DataFrame):
+    return get_onehot(data, 'ProcedureDisplayName')
 
 
 def get_ngrams_title(data: pd.DataFrame):
-    vectorizer = HashingVectorizer(input='content', encoding='utf-8', decode_error='strict', lowercase=True,
-                                   token_pattern=r'\b\w+\b', ngram_range=(3, 3), analyzer='char_wb', n_features=1000,
-                                   binary=True, norm=None)
-    analyze = vectorizer.fit_transform(data.Title)
-    feats = pd.SparseDataFrame(analyze).fillna(0)
-    return pd.DataFrame(feats).add_prefix('Ngrams_Title_')
+    return get_ngrams(data, 'Title', n_features=1000, ngram_range=(3, 3), analyzer='char_wb')
 
 
 def get_ngrams_proceduredisplayname(data: pd.DataFrame):
-    vectorizer = HashingVectorizer(input='content', encoding='utf-8', decode_error='strict', strip_accents=None,
-                                   lowercase=True, preprocessor=None, tokenizer=None, stop_words=None,
-                                   token_pattern=r'\b\w+\b', ngram_range=(1, 2), analyzer='word', n_features=300,
-                                   binary=True, norm=None, non_negative=False)
-    analyze = vectorizer.fit_transform(data.ProcedureDisplayName)
-    feats = pd.SparseDataFrame(analyze).fillna(0)
-    return pd.DataFrame(feats).add_prefix('Ngrams_ProcedureDisplayName_')
+    return get_ngrams(data, 'ProcedureDisplayName', n_features=300, ngram_range=(1, 2), analyzer='word')

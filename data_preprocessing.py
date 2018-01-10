@@ -18,15 +18,14 @@ def preprocess_data(data):
 
 def convert_currencies(data):
     c = CurrencyConverter()
-    c.convert(100, 'USD', 'RUB')
-
+    coeffs = {'%': 1, 'RUB': 1, 'XDR': 81.35}
     for code in data['CurrencyCode'].unique():
-        if code == '%' or 'XDR':
-            continue
-        data.loc[data['CurrencyCode'] == code, 'Amount'] = (
-            data.loc[data['CurrencyCode'] == code, 'Amount'].apply(
-                lambda x: c.convert(x, code, 'RUB')
+        if code in coeffs:
+            data.loc[data['CurrencyCode'] == code, 'RubPrice'] = data.loc[data['CurrencyCode'] == code, 'Amount'] * coeffs[code]
+        else:
+            data.loc[data['CurrencyCode'] == code, 'RubPrice'] = (
+                data.loc[data['CurrencyCode'] == code, 'Amount'].apply(
+                    lambda x: c.convert(x, code, 'RUB')
+                )
             )
-        )
-        data.loc[data['CurrencyCode'] == code, 'CurrencyCode'] = 'RUB'
     return data
