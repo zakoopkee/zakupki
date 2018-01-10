@@ -6,6 +6,7 @@ def preprocess_data(data):
     data['SuppliersCount'].fillna(0, inplace=True)
     data['IsWinner'].fillna(0, inplace=True)
     data.Title.fillna("", inplace=True)
+    data.ProcedureDisplayName.fillna("", inplace=True)
     data = data.drop(['Nds', 'LawCode', 'LawDisplayName'], axis=1)
     data['IsWinner'] = pd.to_numeric(data['IsWinner'])
     data['Amount'] = pd.to_numeric(

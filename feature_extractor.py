@@ -35,4 +35,10 @@ def get_ngrams_title(data: pd.DataFrame):
 
 
 def get_ngrams_proceduredisplayname(data: pd.DataFrame):
-    return data
+    vectorizer = HashingVectorizer(input='content', encoding='utf-8', decode_error='strict', strip_accents=None,
+                                   lowercase=True, preprocessor=None, tokenizer=None, stop_words=None,
+                                   token_pattern=r'\b\w+\b', ngram_range=(1, 2), analyzer='word', n_features=300,
+                                   binary=True, norm=None, non_negative=False)
+    analyze = vectorizer.fit_transform(data.ProcedureDisplayName)
+    feats = pd.SparseDataFrame(analyze).fillna(0)
+    return pd.DataFrame(feats).add_prefix('Ngrams_ProcedureDisplayName_')
