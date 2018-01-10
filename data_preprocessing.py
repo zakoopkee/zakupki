@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from currency_converter import CurrencyConverter
 
@@ -18,7 +19,10 @@ def preprocess_data(data):
 
 def convert_currencies(data):
     c = CurrencyConverter()
-    coeffs = {'%': 1, 'RUB': 1, 'XDR': 81.35}
+    coeffs = {'%': 1, 'RUB': 1, 'XDR': 81.35, 'MVR': 3.68, 'STD': 0.00279, 'KHR': 0.01416, 'OMR': 148.35, 'SVC': 6.5189,
+              'GMD': 1.1968, 'PНP': 1.128, 'BYR': 0.002828, 'KZT': 0.1727, 'WST': 22.75, 'PEN': 17.69, 'MUR': 1.69,
+              'SDG': 8.1346, 'KGS': 0.8269, 'SRD': 7.66, 'TOP': 25.866, 'TZS': 0.02542, 'TJS': 6.4612, 'AMD': 0.1176,
+              'BWP': 5.7835, 'UGX': 0.0156, 'MNT': 0.02345, np.nan: 1}
     for code in data['CurrencyCode'].unique():
         if code in coeffs:
             data.loc[data['CurrencyCode'] == code, 'RubPrice'] = data.loc[data['CurrencyCode'] == code, 'Amount'] * coeffs[code]
