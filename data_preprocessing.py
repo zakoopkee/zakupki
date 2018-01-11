@@ -16,6 +16,7 @@ def preprocess_data(data):
     )
     data = convert_currencies(data)
     data['ResultClass'] = [get_result_class(x, y) for x, y in zip(data.StatusCode, data.IsWinner)]
+    data = data[data['ResultClass'] != 3]
 
     return data
 
