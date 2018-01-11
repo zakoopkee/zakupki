@@ -15,6 +15,7 @@ def preprocess_data(data):
         data['Amount'].str.replace(',', '.'), errors='coerce'
     )
     data = convert_currencies(data)
+    data['ResultClass'] = [get_result_class(x, y) for x, y in zip(data.StatusCode, data.IsWinner)]
 
     return data
 
