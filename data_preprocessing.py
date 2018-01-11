@@ -10,11 +10,24 @@ def preprocess_data(data):
     data.ProcedureDisplayName.fillna("", inplace=True)
     data = data.drop(['Nds', 'LawCode', 'LawDisplayName'], axis=1)
     data['IsWinner'] = pd.to_numeric(data['IsWinner'])
+    data['StatusCode'] = pd.to_numeric(data['StatusCode'])
     data['Amount'] = pd.to_numeric(
         data['Amount'].str.replace(',', '.'), errors='coerce'
     )
     data = convert_currencies(data)
+    data['ResultClass'] = [get_result_class(x, y) for x, y in zip(data.StatusCode, data.IsWinner)]
+
     return data
+
+
+def get_result_class(statusCode, isWinner):
+    if (statusCode == 3):
+        return 0 # отмена
+    if (statusCode == 2):
+        if (isWinner == 0):
+            return 1
+        return 2
+    return 3
 
 
 def convert_currencies(data):
