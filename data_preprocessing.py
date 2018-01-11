@@ -15,16 +15,15 @@ def preprocess_data(data):
         data['Amount'].str.replace(',', '.'), errors='coerce'
     )
     data = convert_currencies(data)
-    data['ResultClass'] = [get_result_class(x, y) for x, y in zip(data.StatusCode, data.IsWinner)]
 
     return data
 
 
-def get_result_class(statusCode, isWinner):
-    if (statusCode == 3):
+def get_result_class(status_code, is_winner):
+    if status_code == 3:
         return 0 # отмена
-    if (statusCode == 2):
-        if (isWinner == 0):
+    if status_code == 2:
+        if is_winner == 0:
             return 1
         return 2
     return 3
