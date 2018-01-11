@@ -18,18 +18,16 @@ def preprocess_data(data):
     data['RubPrice'] = pd.to_numeric(data['RubPrice'])
     data['SuppliersCount'] = pd.to_numeric(data['SuppliersCount'])
     data['ResultClass'] = [get_result_class(x, y) for x, y in zip(data.StatusCode, data.IsWinner)]
-    data = data[data['ResultClass'] != 3]
+    data = data[data.ResultClass != 3]
 
     return data
 
 
 def get_result_class(status_code, is_winner):
     if status_code == 3:
-        return 0 # отмена
-    if status_code == 2:
-        if is_winner == 0:
-            return 1
         return 2
+    if status_code == 2:
+        return is_winner
     return 3
 
 
