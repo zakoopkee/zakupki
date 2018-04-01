@@ -1,4 +1,8 @@
 import pandas as pd
+import pymorphy2
+import string
+import re
+
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.feature_extraction.text import HashingVectorizer
 columns_drop = ['id', 'Title', 'Uri', 'PublicationDateTimeUTC', 'ProcedureDisplayName', 'CurrencyCode',
@@ -36,3 +40,21 @@ def get_onehot(data, column):
     onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
     labels = data[column].sort_values().unique()
     return pd.DataFrame(onehot_encoded, columns=labels).add_prefix(f'OneHot_{column}_')
+
+
+morph = pymorphy2.MorphAnalyzer()
+word_regex = re.compile(r'\w+')
+remove_punct_map = dict.fromkeys(map(ord, string.punctuation))
+
+
+def normalize_word(word):
+    return morph.parse(word)[0].normal_form
+
+
+def normalize_string(s: str):
+    return ' '.join(map(normalize_word, word_regex.findall(s.translate(remove_punct_map))))
+
+
+def normalize(data, columns):
+    for col in columns:
+        data[col] = data[col].map(normalize_string)
