@@ -1,9 +1,23 @@
 import numpy as np
 import pandas as pd
+import pymorphy2
+import string
+import re
+import datetime
+
 from currency_converter import CurrencyConverter
 
 
-def preprocess_data(data):
+def log(s):
+    print(f'[{datetime.datetime.now()}]: {s}')
+
+
+def preprocess_data(data, limit=None, normalize_text=False, save_file=None, verbose=False):
+    if limit is not None:
+        if verbose:
+            log(f'Taking first {limit} lines')
+        data = data.head(limit)
+
     data['SuppliersCount'].fillna(0, inplace=True)
     data['IsWinner'].fillna(0, inplace=True)
     data.Title.fillna("", inplace=True)
@@ -19,6 +33,17 @@ def preprocess_data(data):
     data['SuppliersCount'] = pd.to_numeric(data['SuppliersCount'])
     data['ResultClass'] = [get_result_class(x, y) for x, y in zip(data.StatusCode, data.IsWinner)]
     data = data[data.ResultClass != 3]
+
+    if normalize_text:
+        normalize(data, 'Title', verbose)
+        normalize(data, 'ProcedureDisplayName', verbose)
+
+    data.reset_index(drop=True, inplace=True)
+
+    if save_file is not None:
+        if verbose:
+            log(f'Saving {save_file}')
+        data.to_csv(save_file, encoding='utf-8', sep='\t', index=False)
 
     return data
 
@@ -47,3 +72,34 @@ def convert_currencies(data):
                 )
             )
     return data
+
+
+morph = pymorphy2.MorphAnalyzer()
+word_regex = re.compile(r'\w+')
+remove_punct_map = dict.fromkeys(map(ord, string.punctuation))
+normalization_cache = {}
+cache_hits = 0
+
+
+def normalize_word(word):
+    return morph.parse(word)[0].normal_form
+
+
+def normalize_string(s: str):
+    if s in normalization_cache:
+        global cache_hits
+        cache_hits += 1
+        return normalization_cache[s]
+    normalized = ' '.join(map(normalize_word, word_regex.findall(s.translate(remove_punct_map))))
+    normalization_cache[s] = normalized
+    return normalized
+
+
+def normalize(data, column, verbose):
+    if verbose:
+        log(f'Start normalizing {column}')
+    data[column] = data[column].map(normalize_string)
+    if verbose:
+        global cache_hits
+        log(f'End normalizing {column}, cache hits: {cache_hits}')
+        cache_hits = 0
