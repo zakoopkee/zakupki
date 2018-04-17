@@ -22,7 +22,10 @@ def preprocess_data(data, limit=None, normalize_text=False, save_file=None, verb
     data['IsWinner'].fillna(0, inplace=True)
     data.Title.fillna("", inplace=True)
     data.ProcedureDisplayName.fillna("", inplace=True)
-    data = data.drop(['Nds', 'LawCode', 'LawDisplayName'], axis=1)
+    for e in ['Nds', 'LawCode', 'LawDisplayName']:
+        if e in data.columns:
+            data = data.drop(e, axis=1)
+    #data = data.drop(['Nds', 'LawCode', 'LawDisplayName'], axis=1)
     data['IsWinner'] = pd.to_numeric(data['IsWinner'])
     data['StatusCode'] = pd.to_numeric(data['StatusCode'])
     data['Amount'] = pd.to_numeric(
