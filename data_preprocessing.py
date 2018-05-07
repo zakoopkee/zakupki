@@ -39,7 +39,8 @@ def preprocess_data(data, limit=None, normalize_text=False, save_file=None, verb
     data = convert_currencies(data)
     data['RubPrice'] = pd.to_numeric(data['RubPrice'])
     data['SuppliersCount'] = pd.to_numeric(data['SuppliersCount'])
-    data['Ogrn'] = pd.to_numeric(data['Ogrn'])
+    data['Ogrn1'] = [int(x[3:5]) for x in data['Ogrn']]
+    data.Ogrn1.fillna(0, inplace=True)
 
     if normalize_text:
         normalize(data, 'Title', verbose)

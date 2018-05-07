@@ -16,7 +16,7 @@ def extract_features(data: pd.DataFrame, use_pca=False, title_features=300, pca_
     print('oh CurrencyCode')
     onehot_proceduredisplayname = get_onehot(data, 'ProcedureDisplayName')
     print('oh ProcedureDisplayName')
-    onehot_ogrn = get_onehot(data, 'Ogrn')
+    onehot_ogrn = get_onehot(data, 'Ogrn1')
     print('oh Ogrn')
 
     ngrams_title = get_ngrams(data, 'Title', n_features=title_features, ngram_range=(3, 3), analyzer='char_wb')
