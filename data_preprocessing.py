@@ -13,29 +13,33 @@ def log(s):
 
 
 def preprocess_data(data, limit=None, normalize_text=False, save_file=None, verbose=False):
-    if limit is not None:
-        if verbose:
-            log(f'Taking first {limit} lines')
-        data = data.head(limit)
-
     data['SuppliersCount'].fillna(0, inplace=True)
     data['IsWinner'].fillna(0, inplace=True)
+    data['IsWinner'] = pd.to_numeric(data['IsWinner'])
+    data['StatusCode'] = pd.to_numeric(data['StatusCode'])
+    data['ResultClass'] = [get_result_class(x, y) for x, y in zip(data.StatusCode, data.IsWinner)]
+    data = data[data.ResultClass != 3]
+    if limit is not None:
+        data = get_balanced_sample(data, limit)
+        if verbose:
+            sample_sizes = data.groupby('ResultClass').size()
+            log(f'Unsuccess samples count: {sample_sizes[0]}')
+            log(f'Success samples count: {sample_sizes[1]}')
+            log(f'Cancel samples count: {sample_sizes[2]}')
+
     data.Title.fillna("", inplace=True)
     data.ProcedureDisplayName.fillna("", inplace=True)
     for e in ['Nds', 'LawCode', 'LawDisplayName']:
         if e in data.columns:
             data = data.drop(e, axis=1)
     #data = data.drop(['Nds', 'LawCode', 'LawDisplayName'], axis=1)
-    data['IsWinner'] = pd.to_numeric(data['IsWinner'])
-    data['StatusCode'] = pd.to_numeric(data['StatusCode'])
     data['Amount'] = pd.to_numeric(
         data['Amount'].str.replace(',', '.'), errors='coerce'
     )
     data = convert_currencies(data)
     data['RubPrice'] = pd.to_numeric(data['RubPrice'])
     data['SuppliersCount'] = pd.to_numeric(data['SuppliersCount'])
-    data['ResultClass'] = [get_result_class(x, y) for x, y in zip(data.StatusCode, data.IsWinner)]
-    data = data[data.ResultClass != 3]
+    data['Ogrn'] = pd.to_numeric(data['Ogrn'])
 
     if normalize_text:
         normalize(data, 'Title', verbose)
@@ -49,7 +53,15 @@ def preprocess_data(data, limit=None, normalize_text=False, save_file=None, verb
         data.to_csv(save_file, encoding='utf-8', sep='\t', index=False)
 
     return data
-
+    
+def get_balanced_sample(data, count):
+    cancel_count = min(count // 3, data[data.ResultClass == 2].shape[0])
+    success_count = min((count - cancel_count) // 2, data[data.ResultClass == 1].shape[0])
+    unsuccess_count = count - cancel_count - success_count
+    balanced_sample = pd.concat([data[data.ResultClass == 2][:cancel_count],
+                                 data[data.ResultClass == 1][:success_count],
+                                 data[data.ResultClass == 0][:unsuccess_count]])
+    return balanced_sample
 
 def get_result_class(status_code, is_winner):
     if status_code == 3:

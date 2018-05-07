@@ -11,21 +11,34 @@ columns_drop = ['id', 'Title', 'Uri', 'PublicationDateTimeUTC', 'ProcedureDispla
                 'StatusDisplayName', 'StatusCode', 'SuppliersCount', 'IsWinner']
 
 
-def extract_features(data: pd.DataFrame, use_pca=False, title_features=1000, pca_features=100, verbose=False):
+def extract_features(data: pd.DataFrame, use_pca=False, title_features=300, pca_features=100, verbose=False):
     onehot_currency = get_onehot(data, 'CurrencyCode')
+    print('oh CurrencyCode')
     onehot_proceduredisplayname = get_onehot(data, 'ProcedureDisplayName')
+    print('oh ProcedureDisplayName')
+    onehot_ogrn = get_onehot(data, 'Ogrn')
+    print('oh Ogrn')
 
     ngrams_title = get_ngrams(data, 'Title', n_features=title_features, ngram_range=(3, 3), analyzer='char_wb')
-    # ngrams_title = get_ngrams(data, 'Title', n_features=1000, ngram_range=(1, 3), analyzer='word')
+    print('ng Title')
     ngrams_proceduredisplayname = get_ngrams(data, 'ProcedureDisplayName', n_features=300, ngram_range=(1, 2), analyzer='word')
+    print('ng ProcedureDisplayName')
+    ngrams_orgname = get_ngrams(data, 'Name', n_features=300, ngram_range=(1, 1), analyzer='word')
+    print('ng OrgName')
 
-    dfs = [data, onehot_currency, onehot_proceduredisplayname, ngrams_title, ngrams_proceduredisplayname]
+    dfs = [data, onehot_currency, onehot_proceduredisplayname, onehot_ogrn, ngrams_title, ngrams_proceduredisplayname, ngrams_orgname]
     pca_ = None
     if use_pca:
         df, pca_ = pca(ngrams_title, pca_features, 'Title', verbose)
         dfs.append(df)
 
-    return pd.concat(dfs, axis=1).drop(columns_drop, axis=1), pca_
+    return pd.concat([data[['RubPrice', 'ResultClass', 'Amount']],
+                      onehot_currency,
+                      onehot_proceduredisplayname,
+                      onehot_ogrn,
+                      ngrams_title,
+                      ngrams_proceduredisplayname,
+                      ngrams_orgname], axis=1), pca_
 
 
 def pca(data, n_features, title, verbose):
