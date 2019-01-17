@@ -43,7 +43,7 @@ def extract_features(data: pd.DataFrame, onehot_encode=True, use_pca=False, titl
         df, pca_ = pca(ngrams_title, pca_features, 'Title', verbose)
         dfs.append(df)
 
-    return pd.concat([data[['RubPrice', 'ResultClass', 'Amount']]] +
+    return pd.concat([data[['RubPrice', 'ResultClass', 'SuppliersCount', 'Amount']]] +
                      ([onehot_currency, onehot_proceduredisplayname, onehot_ogrn] if onehot_encode else [data[['CurrencyCode', 'Ogrn1']], get_label(data, 'ProcedureDisplayName')]) +
                      [ngrams_title, ngrams_proceduredisplayname, ngrams_orgname], axis=1), pca_
 
