@@ -4,7 +4,7 @@
 
 ### Используемые данные
 
-Данные взяты с сайта [zakupki.gov.ru](zakupki.gov.ru).
+Данные взяты с сайта [zakupki.gov.ru](http://www.zakupki.gov.ru/epz/main/public/home.html).
 
 Предобработка в файле `data_preprocessing.py`, выделение фич в `feature_extractor.py`.
 
