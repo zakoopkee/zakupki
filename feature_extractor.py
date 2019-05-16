@@ -75,7 +75,7 @@ def get_ngrams(data, column, n_features, ngram_range, analyzer):
                                    token_pattern=r'\b\w+\b', ngram_range=ngram_range, analyzer=analyzer,
                                    n_features=n_features, binary=True, norm=None)
     analyze = vectorizer.fit_transform(data[column])
-    feats = pd.SparseDataFrame(analyze).fillna(0)
+    feats = pd.SparseDataFrame(analyze).fillna(0).to_dense()
     return pd.DataFrame(feats).add_prefix(f'Ngrams_{column}_')
 
 
