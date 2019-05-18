@@ -52,3 +52,20 @@
 64, 64, gru-r2loss-emb: 0.7448
 32, 32, gru-r2loss-emb: 0.7365
 
+128, 256, gru-r2loss-avgpool: 0.7462
+128, 128, gru-r2loss-avgpool: 0.7440
+128, 64, gru-r2loss-avgpool: 0.7434
+64, 64, gru-r2loss-avgpool: 0.7453
+32, 32, gru-r2loss-avgpool: 0.7446
+
+128, 256, gru-r2loss-softmaxpool: 0.7468
+128, 128, gru-r2loss-softmaxpool: 0.7438
+128, 64, gru-r2loss-softmaxpool: 0.7472
+64, 64, gru-r2loss-softmaxpool: 0.7451
+32, 32, gru-r2loss-softmaxpool: 0.7450
+
+128, 256, gru-r2loss-attnpool: 0.7494
+128, 128, gru-r2loss-attnpool: 0.7403
+128, 64, gru-r2loss-attnpool: 0.7397
+64, 64, gru-r2loss-attnpool: 0.7449
+32, 32, gru-r2loss-attnpool: 0.7453
