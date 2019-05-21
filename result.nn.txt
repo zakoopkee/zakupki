@@ -69,3 +69,50 @@
 128, 64, gru-r2loss-attnpool: 0.7397
 64, 64, gru-r2loss-attnpool: 0.7449
 32, 32, gru-r2loss-attnpool: 0.7453
+
+128, 256, gru-r2loss-bpe: 0.7491
+128, 128, gru-r2loss-bpe: 0.7463
+128, 64, gru-r2loss-bpe: 0.7453
+64, 64, gru-r2loss-bpe: 0.7362
+32, 32, gru-r2loss-bpe: 0.7339
+
+128, 256, lstm-r2loss-bpe: 0.7478
+128, 128, lstm-r2loss-bpe: 0.7479
+128, 64, lstm-r2loss-bpe: 0.7434
+64, 64, lstm-r2loss-bpe: 0.7423
+32, 32, lstm-r2loss-bpe: 0.7353
+
+128, 256, gru-r2loss-bpe: 0.7491
+128, 128, gru-r2loss-bpe: 0.7463
+128, 64, gru-r2loss-bpe: 0.7453
+64, 64, gru-r2loss-bpe: 0.7362
+32, 32, gru-r2loss-bpe: 0.7339
+
+128, 256, gru-r2loss-bpe-lesslayers: 0.7479
+128, 128, gru-r2loss-bpe-lesslayers: 0.7488
+128, 64, gru-r2loss-bpe-lesslayers: 0.7413
+64, 64, gru-r2loss-bpe-lesslayers: 0.7424
+32, 32, gru-r2loss-bpe-lesslayers: 0.7321
+
+128, 256, gru-r2loss-char-lesslayers: 0.7432
+128, 128, gru-r2loss-char-lesslayers: 0.7401
+128, 64, gru-r2loss-char-lesslayers: 0.7318
+64, 64, gru-r2loss-char-lesslayers: 0.7365
+32, 32, gru-r2loss-char-lesslayers: 0.7290
+
+128, 256, gru-r2loss-char: 0.7409
+128, 128, gru-r2loss-char: 0.7413
+128, 64, gru-r2loss-char: 0.7312
+64, 64, gru-r2loss-char: 0.7335
+32, 32, gru-r2loss-char: 0.7301
+
+32, 256, gru-r2loss-char: 0.7493
+32, 128, gru-r2loss-char: 0.7382
+32, 64, gru-r2loss-char: 0.7405
+32, 32, gru-r2loss-char: 0.7301
+
+128, 256, lstm-r2loss-char: 
+128, 128, lstm-r2loss-char: 
+128, 64, lstm-r2loss-char: 
+64, 64, lstm-r2loss-char: 
+32, 32, lstm-r2loss-char: 
