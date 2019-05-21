@@ -111,8 +111,26 @@
 32, 64, gru-r2loss-char: 0.7405
 32, 32, gru-r2loss-char: 0.7301
 
-128, 256, lstm-r2loss-char: 
-128, 128, lstm-r2loss-char: 
-128, 64, lstm-r2loss-char: 
-64, 64, lstm-r2loss-char: 
-32, 32, lstm-r2loss-char: 
+128, 256, lstm-r2loss-char: 0.7481
+128, 128, lstm-r2loss-char: 0.7449
+128, 64, lstm-r2loss-char: 0.7306
+64, 64, lstm-r2loss-char: 0.7306
+32, 32, lstm-r2loss-char: 0.7386
+
+128, 256, bi-lstm-r2loss-char: 0.7475
+128, 128, bi-lstm-r2loss-char: 0.7496
+128, 64, bi-lstm-r2loss-char: 0.7349
+64, 64, bi-lstm-r2loss-char: 0.7398
+
+128, 256, gru-r2loss-no-cat: 0.7385
+128, 128, gru-r2loss-no-cat: 0.7377
+128, 64, gru-r2loss-no-cat: 0.7309
+64, 64, gru-r2loss-no-cat: 0.7304
+
+128, 256, gru-r2loss-bn: 0.7496
+128, 128, gru-r2loss-bn: 0.7457
+128, 64, gru-r2loss-bn: 0.7442
+64, 64, gru-r2loss-bn: 0.7424
+
+128, 512, gru-r2loss-bn: 0.7476
+128, 300, gru-r2loss-bn: 0.7521
