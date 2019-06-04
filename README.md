@@ -21,7 +21,7 @@
 
 **Цель**: Чтобы владелец закупки еще до ее окончания мог определить по имеющимся данным, будет ли его закупка успешной.
 
-Решение -- [zakupki_classification.ipynb](https://github.com/zakoopkee/zakupki/blob/master/zakupki_classification.ipynb)
+Решение -- [zakupki_classification_with_one_sup.ipynb](https://github.com/zakoopkee/zakupki/blob/master/zakupki_classification_with_one_sup.ipynb) (на полных данных), [zakupki_classification_without_one_sup.ipynb](https://github.com/zakoopkee/zakupki/blob/master/zakupki_classification_without_one_sup.ipynb) (на данных без процедуры "Закупка у единственного поставщика")
 
 Проведено сравнение алгоритмов `RandomForestClassifier`, `XGBClassifier`, `LGBMClassifier`, `CatBoostClassifier`.
 
