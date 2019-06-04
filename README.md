@@ -23,9 +23,9 @@
 
 Решение -- [zakupki_classification_with_one_sup.ipynb](https://github.com/zakoopkee/zakupki/blob/master/zakupki_classification_with_one_sup.ipynb) (на полных данных), [zakupki_classification_without_one_sup.ipynb](https://github.com/zakoopkee/zakupki/blob/master/zakupki_classification_without_one_sup.ipynb) (на данных без процедуры "Закупка у единственного поставщика")
 
-Проведено сравнение алгоритмов `RandomForestClassifier`, `XGBClassifier`, `LGBMClassifier`, `CatBoostClassifier`.
+Проведено сравнение алгоритмов `DecisionTreeClassifier`, `RandomForestClassifier`, `XGBClassifier`, `LGBMClassifier`, `CatBoostClassifier`.
 
-Используемые метрики: `precision`, `recall`, `f1-score`.
+Используемые метрики: `precision`, `recall`, `f1-score`, `accuracy`.
 
 ### Предсказание числа кандидатов закупки
 
